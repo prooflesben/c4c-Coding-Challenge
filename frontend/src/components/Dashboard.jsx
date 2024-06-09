@@ -7,27 +7,33 @@ import PartnerTile from './PartnerTile';
 */
 function Dashboard() {
 
-  const [partners, setPartners] = useState({});
+  const [partnersJson, setPartnersJson] = useState({});
+  const [partnerComponents, setPartnerComponents] = useState([]);
 
   // Load all partners on initial page load 
    useEffect(() => {
-     fetch('http://localhost:4000', {
+     fetch('http://localhost:4000/partners', {
       method: 'GET',
     })
     .then((res) => res.json()).then((data) => {
-      setPartners(data.sftt)
-      // console.log(data)
-      // console.log(data.sftt)
-      
+      setPartnersJson(data)
+      //console.log(data)
+      //console.log(partnersJson)
+      const parnterCompTiles = [];
+      for(let partner in partnersJson){
+        parnterCompTiles.push(<PartnerTile key={partner} partnerData = {{partners: partnersJson[partner]}}/>)
+        //console.log("Partner data", partnersJson[partner])
+      }
+      setPartnerComponents(parnterCompTiles)
     }).catch((error) => {
       console.error('Error fetching partner data:', error);
-    })})
+    })},[partnerComponents])
 
 
   return (
     <div id="main-content">
       <div id="main-partners-grid">
-        <PartnerTile partnerData={{ partners}} />
+      {partnerComponents}
       </div>
     </div>
   )
