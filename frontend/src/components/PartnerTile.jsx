@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
-import { Button } from "react-bootstrap";
 import axios from 'axios'
 /*
   A block for a single partner, containing information for them
@@ -16,13 +16,18 @@ PartnerTile.propTypes = {
   }).isRequired,
 };
 
+/**
+ * Component to handle adding a partner
+ * @param {JSON} partnerData JSON of the partners information 
+ * @returns 
+ */
 function PartnerTile({ partnerData }) {
-  //console.log(partnerData.partners)
   const { name, logoUrl, description, isCurrentParnter } = partnerData.partners;
-  const handleDelete = (event) => {
+  // Handles deleting a partner
+  const handleDelete = async () => {
     console.log(name)
     const url = `http://localhost:4000/partners/${name}`
-    axios.delete(url).then(function (response) {
+    await axios.delete(url).then(function (response) {
       console.log(response)
     }).catch(function (err) {
       console.log(err)
@@ -30,7 +35,6 @@ function PartnerTile({ partnerData }) {
   };
 
   
-  //console.log(partnerData.partners)
   return (
     <div className="partner-tile">
       <img className="partner-thumbnail" src={logoUrl} />
@@ -41,9 +45,9 @@ function PartnerTile({ partnerData }) {
         <p>Are we currently working with them: {isCurrentParnter ? "Yes" : "No"}</p>
       </div>
       <div>
-      <Button type="button" onClick={handleDelete}>
+      <button type="button" className="btn btn-secondary" onClick={handleDelete}>
         Delete
-      </Button>
+      </button>
       </div>
     </div>
   );

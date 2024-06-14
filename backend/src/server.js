@@ -28,14 +28,18 @@ app.use((req, res, next) => {
   APPLICATION ROUTES
 */
 
+// Route to handle /partners GET Request 
+// Fetches the info of all of the partners
 app.get("/partners", async (req, res) => {
   try {
     res.status(200).json(await getPartners());
   } catch (err) {
-    res.status(400).json({ message: message });
+    res.status(400).json({ message: err.message });
   }
 });
 
+// Route to handle /partners PUT Request 
+// Uploads the informatino of a new partner
 app.put("/partners", async (req, res) => {
   const { logoUrl, name, description, isCurrentParnter } = req.body;
 
@@ -48,6 +52,8 @@ app.put("/partners", async (req, res) => {
   }
 });
 
+// Route to handle /partners DELETE Request 
+// Deletes the information of a given partner
 app.delete("/partners/:name", async (req, res) => {
   const  name  = req.params.name;
   console.log(name)
@@ -60,7 +66,13 @@ app.delete("/partners/:name", async (req, res) => {
   }
 });
 
-// Think about fetching and changing instead of holding a handle
+/**
+ * Stores the information of the given partner
+ * @param {string} logoUrl 
+ * @param {string} name 
+ * @param {string} description 
+ * @param {boolean} isCurrentParnter 
+ */
 async function storePartner(logoUrl, name, description, isCurrentParnter) {
   let partners = await getPartners();
   
@@ -82,6 +94,10 @@ async function storePartner(logoUrl, name, description, isCurrentParnter) {
   }
 }
 
+/**
+ * Fetches the information of all of the parnters
+ * @returns {JSON} JSON of the partners information
+ */
 async function getPartners() {
   try {
     const data = await fs.readFile("./backend/jsons/partners.json", "utf8");
@@ -92,6 +108,10 @@ async function getPartners() {
   }
 }
 
+/**
+ * Deletes the partner with the given name
+ * @param {string} name 
+ */
 async function deletePartner(name){
   
   try{

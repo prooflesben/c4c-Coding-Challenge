@@ -10,6 +10,11 @@
   width: 1000px;
   padding: 20px 30px;
   margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  background-color: #f9f9f9; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /
 }
 
 #main-partners-grid {
@@ -33,23 +38,84 @@ h1.title {
 .partner-tile {
   width: 450px;
   height: 400px;
-
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; 
   align-items: center;
-
   border: 1px solid #3d3d3d;
   border-radius: 12px;
-
   padding: 25px;
+  box-sizing: border-box;
+  overflow: auto;
 }
+
 
 .partner-thumbnail {
   max-width: 330px;
   max-height: 150px;
+  object-fit: contain;
 }
 
 .partner-info {
   font-size: 0.9em;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: auto;
+  max-width: 600px; /* Adjust as needed */
+  background-color: #f9f9f9; /* Optional, for better visualization */
+  border-radius: 8px; /* Optional, for better visualization */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional, for better visualization */
+}
+
+
+.partner-form {
+  width: 100%;
+}
+
+.mb-3 {
+  margin-bottom: 15px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-control,
+.form-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-control.textarea {
+  max-width: 100%; 
+  width: 100%; 
+  max-width: 600px; 
+  resize: none; 
+  overflow-y: auto; 
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Add spacing between the buttons */
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
 }

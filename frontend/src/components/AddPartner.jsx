@@ -1,40 +1,64 @@
 import { useState } from "react";
 import axios from "axios";
 
+/**
+ * Component to add a partner to the grid.
+ * @returns {JSX.Element} - Rendered component.
+ */
 function AddPartner() {
   const [name, setName] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
   const [description, setDescription] = useState("");
   const [isCurrentParnter, setIsCurrentParnter] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
 
-  const handleGoBack = (event) => {
-    window.location.href = 'http://localhost:3000'
+  // Handles the Go Back button
+  const handleGoBack = () => {
+    window.location.href = "http://localhost:3000";
   };
 
+  // Handles the name form and its changes
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
 
+  // Handles the logo form and its changes
   const handleLogoChange = (event) => {
     setLogoUrl(event.target.value);
   };
 
+  // Handles the description form and its changes
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
 
+  // Handles the is current partner form and its changes
   const handleIsCurrentParnter = (event) => {
-    setIsCurrentParnter(
-      event.target.value.toLowerCase() === "Yes".toLowerCase() ? true : false
-    );
+    setIsCurrentParnter(event.target.value === "Yes");
   };
 
-  const handleSubmit = (event) => {
+  // Validates the logo URL format
+  const validateLogoUrl = (url) => {
+    const pattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i;
+    return !!pattern.test(url);
+  };
+
+  // Submits the new partner to storage with validation
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Name:", name);
-    console.log("Logo:", logoUrl); // The selected logo file
-    console.log("Description:", description);
-    console.log("Are they a current partner:", isCurrentParnter);
+
+    // Check if any field is empty
+    if (!name || !logoUrl || !description || !isCurrentParnter) {
+      setErrorMessage("Please fill in all fields."); // Update error message
+      return; 
+    }
+
+    // Validate logoUrl format
+    if (!validateLogoUrl(logoUrl)) {
+      setErrorMessage("Please enter a valid LogoUrl."); 
+      return; 
+    }
+
     const putURL = "http://localhost:4000/partners";
     const config = {
       headers: {
@@ -45,20 +69,21 @@ function AddPartner() {
       logoUrl: logoUrl,
       name: name.trim(),
       description: description,
-      isCurrentParnter: isCurrentParnter
+      isCurrentParnter: isCurrentParnter,
     };
-    axios.put(putURL,data, config).then(function (response) {
-      window.location.href = 'http://localhost:3000'}
-    ).catch(function (error) {
-        console.log(error)
-    })
-
+    try {
+      await axios.put(putURL, data, config);
+      window.location.href = "http://localhost:3000";
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div className="form-container" style={{ textAlign: "center" }}>
       <h1>Enter Partner Info</h1>
-      <form onSubmit={handleSubmit}>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <form onSubmit={handleSubmit} className="partner-form">
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name:
@@ -78,7 +103,7 @@ function AddPartner() {
           <input
             type="text"
             className="form-control"
-            id="name"
+            id="logoUrl"
             value={logoUrl}
             onChange={handleLogoChange}
           />
@@ -87,8 +112,7 @@ function AddPartner() {
           <label htmlFor="description" className="form-label">
             Description:
           </label>
-          <input
-            type="text"
+          <textarea
             className="form-control"
             id="description"
             value={description}
@@ -105,17 +129,22 @@ function AddPartner() {
             value={isCurrentParnter ? "Yes" : "No"}
             onChange={handleIsCurrentParnter}
           >
-            <option value="">Select an option...</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-        <button type="button" onClick={handleGoBack}>
-        Go Back
-      </button>
+        <div className="form-buttons">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleGoBack}
+          >
+            Go Back
+          </button>
+          <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );
