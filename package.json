@@ -4,10 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "frontend": "vite",
-    "backend": "nodemon backend/src/server.js",
+    "frontendDev": "vite",
+    "frontend": "vite --mode production",
+    "backendDev": "nodemon backend/src/server.js",
+    "backend": "node backend/src/server.js",
     "start": "concurrently -k --kill-others-on-fail \"npm run backend\" \"npm run frontend\"",
-    "dev": "concurrently -k --kill-others-on-fail \"npm run backend\" \"npm run frontend\"",
+    "dev": "concurrently -k --kill-others-on-fail \"npm run backendDev\" \"npm run frontendDev\"",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
